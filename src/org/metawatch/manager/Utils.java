@@ -297,11 +297,17 @@ public class Utils {
 			ContentUris.appendId(builder, now );
 			ContentUris.appendId(builder, now + DateUtils.DAY_IN_MILLIS);	        
 			Cursor eventCursor = cr.query(builder.build(),
-					new String[] { "event_id", "begin", "end", "allDay"}, null, null, "startDay ASC, startMinute ASC");
+							new String[] { "event_id", "begin", "end", "allDay", "selfAttendeeStatus", "hasAlarm" }, null, null, "startDay ASC, startMinute ASC");
 			// For a full list of available columns see http://tinyurl.com/yfbg76w
 			MeetingTime="None";
 			while (eventCursor.moveToNext()) {
-				if ((eventCursor.getLong(1) > (CurrentTime+mintime)) &&(eventCursor.getString(3).equals("0"))){
+				if ((eventCursor.getLong(1) > (CurrentTime + mintime))
+						// At least X minutes in future
+						&& (eventCursor.getString(3).equals("0"))
+						// Not all day
+						&& (eventCursor.getInt(4) == 1 || eventCursor.getInt(5) == 1)
+						// hasAlarm or accepted status
+				) {
 					String uid2 = eventCursor.getString(0);	
 					Uri CALENDAR_URI = Uri.parse("content://com.android.calendar/events/" + uid2);
 					//if (Preferences.logging) Log.d(MetaWatch.TAG,"CalendarService.GetData(): Calendar URI: "+ CALENDAR_URI);
