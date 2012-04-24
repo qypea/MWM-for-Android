@@ -102,7 +102,8 @@ public class CalendarWidget implements InternalWidget {
 					meetingTitle = Utils.Meeting_Title;
 					if (Preferences.logging) Log.d(MetaWatch.TAG, "CalendarWidget.refresh() stop");   
 				}
-				
+				MetaWatch.calendarDate = lastRefresh;
+				MetaWatch.calendarDebug = Utils.Meeting_debug;
 			}
 		};
 		thread.start();

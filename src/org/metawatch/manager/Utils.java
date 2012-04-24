@@ -101,6 +101,7 @@ public class Utils {
 	static public String Meeting_Location = "---";
 	static public long Meeting_EndTimestamp;
 	static public long Meeting_StartTimestamp;
+	static public String Meeting_debug = "Not yet run";
 	
 	public static String getContactNameFromNumber(Context context, String number) {
 		
@@ -266,6 +267,7 @@ public class Utils {
 		final long CurrentTime = System.currentTimeMillis();
 
 		try {
+			Meeting_debug = "Refreshing";
 
 			String titletemp="";
 			String locationtemp="";
@@ -300,7 +302,23 @@ public class Utils {
 							new String[] { "event_id", "begin", "end", "allDay", "selfAttendeeStatus", "hasAlarm" }, null, null, "startDay ASC, startMinute ASC");
 			// For a full list of available columns see http://tinyurl.com/yfbg76w
 			MeetingTime="None";
+			Meeting_debug = "Event table:\n";
 			while (eventCursor.moveToNext()) {
+				Meeting_debug = Meeting_debug
+						+ " begin:"
+						+ new SimpleDateFormat("HH:mm").format(eventCursor
+								.getLong(1));
+				Meeting_debug = Meeting_debug
+						+ " end:"
+						+ new SimpleDateFormat("HH:mm").format(eventCursor
+								.getLong(2));
+				Meeting_debug = Meeting_debug + " allDay:"
+						+ eventCursor.getString(3);
+				Meeting_debug = Meeting_debug + " status:"
+						+ eventCursor.getInt(4);
+				Meeting_debug = Meeting_debug + " alarm:"
+						+ eventCursor.getInt(5);
+				Meeting_debug = Meeting_debug + "\n";
 				if ((eventCursor.getLong(1) > (CurrentTime + mintime))
 						// At least X minutes in future
 						&& (eventCursor.getString(3).equals("0"))

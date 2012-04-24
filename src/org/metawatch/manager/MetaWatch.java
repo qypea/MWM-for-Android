@@ -41,12 +41,10 @@ import org.metawatch.manager.MetaWatchService.WeatherProvider;
 import org.metawatch.manager.Monitors.LocationData;
 import org.metawatch.manager.Monitors.WeatherData;
 
-import com.bugsense.trace.BugSenseHandler;
-
 import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlertDialog;
 import android.app.TabActivity;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -71,6 +69,8 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.bugsense.trace.BugSenseHandler;
+
 public class MetaWatch extends TabActivity {
    
 	public static final String TAG = "MetaWatch";
@@ -78,6 +78,9 @@ public class MetaWatch extends TabActivity {
 	public static TextView textView = null;	
 	public static ToggleButton toggleButton = null;
 	
+	public static long calendarDate = 0;
+	public static String calendarDebug = "";
+
 	/** Messenger for communicating with service. */
     Messenger mService = null;
 	
@@ -337,10 +340,14 @@ public class MetaWatch extends TabActivity {
     
     	textView.append("\nMessage Queue Length: " + Protocol.getQueueLength());
     	textView.append("\nNotification Queue Length: " + Notification.getQueueLength() + "\n");
-    	
+
     	if(Preferences.showNotificationQueue) {
     		textView.append(Notification.dumpQueue());
     	}
+
+		textView.append("\nCalendar updated:\n");
+		printDate(calendarDate);
+		textView.append("Calendar debug:\n" + calendarDebug);
     }
     
     private void printDate(long ticks) {
