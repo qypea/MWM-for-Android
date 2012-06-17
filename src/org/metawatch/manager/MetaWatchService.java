@@ -543,6 +543,8 @@ public class MetaWatchService extends Service {
 			SharedPreferences sharedPreferences = PreferenceManager
 					.getDefaultSharedPreferences(context);
 			
+			Idle.toIdle(context);
+
 			/* Notify watch on connection if requested. */
 			boolean notifyOnConnect = sharedPreferences.getBoolean("NotifyWatchOnConnect", false);
 			if (Preferences.logging) Log.d(MetaWatch.TAG, "MetaWatchService.connect(): notifyOnConnect=" + notifyOnConnect);
